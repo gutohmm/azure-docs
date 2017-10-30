@@ -36,7 +36,7 @@ Replace `storage-account-name` and `storage-account-key` with your storage accou
 
 ```powershell
 # create a context for account and key
-$ctx=New-AzureStorageContext storage-account-name storage-account-key
+$ctx=New-AzureStorageContext -StorageAccountName <Name_Storage_Account> -StorageAccountKey <Storage_Account_Key>
 ```
 
 ## Create a new file share
@@ -44,7 +44,7 @@ Create the new share, named `logs`.
 
 ```powershell
 # create a new share
-$s = New-AzureStorageShare logs -Context $ctx
+$share = New-AzureStorageShare -Name <Name_of_Share> -Context $ctx
 ```
 
 You now have a file share in File storage. Next we'll add a directory and a file.
@@ -59,7 +59,7 @@ Create a directory in the share. In the following example, the directory is name
 
 ```powershell
 # create a directory in the share
-New-AzureStorageDirectory -Share $s -Path CustomLogs
+New-AzureStorageDirectory -Share $share -Path CustomLogs
 ```
 
 ## Upload a local file to the directory
@@ -67,7 +67,7 @@ Now upload a local file to the directory. The following example uploads a file f
 
 ```powershell
 # upload a local file to the new directory
-Set-AzureStorageFileContent -Share $s -Source C:\temp\Log1.txt -Path CustomLogs
+Set-AzureStorageFileContent -Share $share -Source C:\temp\Log1.txt -Path CustomLogs
 ```
 
 ## List the files in the directory
@@ -75,7 +75,7 @@ To see the file in the directory, you can list all of the directory's files. Thi
 
 ```powershell
 # list files in the new directory
-Get-AzureStorageFile -Share $s -Path CustomLogs | Get-AzureStorageFile
+Get-AzureStorageFile -Share $share -Path CustomLogs | Get-AzureStorageFile
 ```
 
 Get-AzureStorageFile returns a list of files and directories for whatever directory object is passed in. "Get-AzureStorageFile -Share $s" returns a list of files and directories in the root directory. To get a list of files in a subdirectory, you have to pass the subdirectory to Get-AzureStorageFile. That's what this does -- the first part of the command up to the pipe returns a directory instance of the subdirectory CustomLogs. Then that is passed into Get-AzureStorageFile, which returns the files and directories in CustomLogs.
